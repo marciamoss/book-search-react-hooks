@@ -39,7 +39,7 @@ const BookSearch = () => {
   const currentBooks = results.slice(indexOfFirstBook, indexOfLastBook);
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
-  const renderedResults = (results?.length > 0 && bookName) ? currentBooks.map((result) => {
+  const renderedResults = (currentBooks?.length > 0 && bookName) ? currentBooks.map((result) => {
     return (
         <div className="ui items container" key={result.id}>
             <div className="item">
@@ -89,7 +89,7 @@ const BookSearch = () => {
                     className="input"
                 />
             </div>
-            {(results?.length > 0 && bookName) ?
+            {(currentBooks?.length > 0 && bookName) ?
                 <div>Go to page
                     <Pagination
                         booksPerPage={booksPerPage}
