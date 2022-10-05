@@ -1,0 +1,21 @@
+.field {
+    width: 50%;
+}
+body {
+    background-color:aliceblue;
+
+}
+
+.field-label {
+    font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif !important;
+    font-size: 20px !important;
+    color: rgba(0,0,0,.85) !important;
+    margin-top: 5% !important;
+}
+
+.no-data-label {
+    font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif !important;
+    font-size: 20px !important;
+    color: red !important;
+    font-weight: bold;
+}
