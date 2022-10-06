@@ -11,7 +11,7 @@ const Pagination = ({ booksPerPage, totalBooks, paginate, currentPage }) => {
     <div className="ui compact borderless menu">
         {pageNumbers.map(number => {
             return (
-                <a key={number} onClick={() => paginate(number)} href='!#' className={`item ${currentPage===number ? "active" : ""}`}>{number}</a>
+                <a key={number} onClick={(event) => {event.preventDefault();return paginate(number);}} href='!#' className={`item ${currentPage===number ? "active" : ""}`}>{number}</a>
             );
         }
         )}

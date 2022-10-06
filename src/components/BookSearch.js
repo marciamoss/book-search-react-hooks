@@ -27,8 +27,6 @@ const BookSearch = () => {
     const APIKEY = "&key=AIzaSyA5c5WsLSg30PL4WJkx92HtHn8JitM_DEo&startIndex=0&maxResults=40";
     const search = async () => {
         const { data } = await axios.get(BASEURL + debouncedBookName + APIKEY).catch((error) => console.log("fetch books errored", error));
-        console.log('books', data.items);
-        console.log('books Number', data.items.length);
         setResults(data.items);
     };
     if (debouncedBookName) {
