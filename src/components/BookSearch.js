@@ -36,7 +36,7 @@ const BookSearch = () => {
 
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
-  const currentBooks = results.slice(indexOfFirstBook, indexOfLastBook);
+  const currentBooks = results?.slice(indexOfFirstBook, indexOfLastBook);
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   const renderedResults = (currentBooks?.length > 0 && bookName) ? currentBooks.map((result) => {
