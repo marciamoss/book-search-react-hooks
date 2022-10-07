@@ -1,3 +1,6 @@
-.active{
-    background-color: rgb(229, 251, 186) !important; 
+.active-page {
+    background-color: lightslategray !important;
+}
+.spacing {
+    margin-left: 1% !important;
 }

@@ -1,28 +1,18 @@
-.field {
-    width: 50%;
-}
 body {
-    background-color:aliceblue;
+    background-color:grey;
 
 }
-
 .field-label {
     font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif !important;
-    font-size: 20px !important;
+    font-size: 25px !important;
     color: rgba(0,0,0,.85) !important;
     margin-top: 5% !important;
+    margin-bottom: 5% !important;
+    text-align: center;
 }
-
 .no-data-label {
     font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif !important;
     font-size: 20px !important;
-    color: red !important;
-    font-weight: bold;
-}
-
-.loading {
-    font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif !important;
-    font-size: 20px !important;
-    color: blue !important;
+    color: rgb(114, 7, 7) !important;
     font-weight: bold;
 }

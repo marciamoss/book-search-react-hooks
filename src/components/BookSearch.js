@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./BookSearch.css";
 import Pagination from "./Pagination";
+import Loading from "./Loading";
 
 const BookSearch = () => {
   const [bookName, setBookName] = useState("");
@@ -57,7 +58,7 @@ const BookSearch = () => {
     return (
         <div className="ui items container" key={result.id}>
             <div className="item">
-                <div className="ui small image">
+                <div className="ui tiny image">
                     <img src={result.volumeInfo?.imageLinks?.smallThumbnail} alt="NoImageAvailable"/>
                 </div>
                 <div className="content">
@@ -104,7 +105,7 @@ const BookSearch = () => {
                 />
             </div>
             {(currentBooks?.length > 0 && bookName) ?
-                <div>Go to page
+                <div>Page
                     <Pagination
                         booksPerPage={booksPerPage}
                         totalBooks={booksList?.length}
@@ -115,10 +116,7 @@ const BookSearch = () => {
                 : ''
             }
         </div>
-        {isLoading ?
-            <div className="ui items container loading"><p>Loading.....</p></div>
-            : ''
-        }
+        {isLoading ? <div className="ui items container"><Loading/></div> : '' }
         {noBooksFound ?
             <div className="ui items container no-data-label"><p>No Books Found</p></div>
             : ''

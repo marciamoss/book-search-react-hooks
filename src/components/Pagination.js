@@ -8,10 +8,10 @@ const Pagination = ({ booksPerPage, totalBooks, paginate, currentPage }) => {
     pageNumbers.push(i);
   }
   return (
-    <div className="ui compact borderless menu">
+    <div className="ui spacing compact borderless menu">
         {pageNumbers.map(number => {
             return (
-                <a key={number} onClick={(event) => {event.preventDefault();return paginate(number);}} href='!#' className={`item ${currentPage===number ? "active" : ""}`}>{number}</a>
+                <a key={number} onClick={(event) => {event.preventDefault();return paginate(number);}} href='!#' className={`item ${currentPage===number ? "active-page" : ""}`}>{number}</a>
             );
         }
         )}
