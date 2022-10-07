@@ -16,3 +16,8 @@ body {
     color: rgb(114, 7, 7) !important;
     font-weight: bold;
 }
+input::placeholder {
+    font-weight: bold !important;
+    opacity: .90 !important;
+    color: blue !important;
+}
