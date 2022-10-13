@@ -1,0 +1,72 @@
+import React, { useState, useEffect } from "react";
+import API from "../utils/API";
+import Pagination from "./Pagination";
+import Loading from "./Loading";
+import BooksList from "./BooksList";
+
+const SavedBooks = () => {
+  const [booksList, setBooksList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [booksPerPage] = useState(10);
+  const [isLoading, setIsLoading] = useState(false);
+  const [noBooksFound, setNoBooksFound] = useState(false);
+  const [apiError, setApiError] = useState('');
+
+  useEffect(() => {
+    setIsLoading(true);
+    setBooksList([]);
+    const fetch = async () => {
+      const response = await API.getBooks().catch((error) => {
+        setNoBooksFound(false);
+        setIsLoading(false);
+        setApiError(`Api error: ${error?.message}`);
+      });
+      setBooksList(response?.data);
+      setNoBooksFound((!response?.data || response?.data?.length === 0) ? true : '');
+      setIsLoading(false);
+    };
+    fetch();
+  }, []);
+
+  const indexOfLastBook = currentPage * booksPerPage;
+  const indexOfFirstBook = indexOfLastBook - booksPerPage;
+  const currentBooks = booksList?.slice(indexOfFirstBook, indexOfLastBook);
+  const paginate = pageNumber => setCurrentPage(pageNumber);
+
+  const renderedResults = (currentBooks?.length > 0) ? currentBooks?.map((book) => {
+    return (
+        <BooksList book={book} key={book.id} saved={true} setSavedBooksList={setBooksList} savedBooksList={booksList}></BooksList>
+    );
+  }) : '';
+
+  return (
+    <div className="ui form container">
+      <h1 className="field-label">Saved Books</h1>
+      {isLoading ? <div className="ui items container"><Loading/></div> : '' }
+      {(noBooksFound || booksList.length === 0) ?
+          <div className="ui items container no-data-label"><p>No Saved Books</p></div>
+          : ''
+      }
+      {apiError ?
+          <div className="ui items container no-data-label"><p>{apiError}</p></div>
+          : ''
+      }
+      {currentBooks?.length > 0 ?
+        <>
+          <div>Page
+              <Pagination
+                  booksPerPage={booksPerPage}
+                  totalBooks={booksList?.length}
+                  paginate={paginate}
+                  currentPage={currentPage}
+              />
+          </div>
+          <div className="ui celled list">{renderedResults}</div>
+        </>
+        : ''
+      }
+    </div>
+  );
+};
+  
+export default SavedBooks;

@@ -3,6 +3,7 @@ import axios from "axios";
 import "./BookSearch.css";
 import Pagination from "./Pagination";
 import Loading from "./Loading";
+import BooksList from "./BooksList";
 
 const BookSearch = () => {
   const [bookName, setBookName] = useState("");
@@ -10,7 +11,7 @@ const BookSearch = () => {
   const [debouncedBookName, setDebouncedBookName] = useState(bookName);
   const [booksList, setBooksList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [booksPerPage] = useState(5);
+  const [booksPerPage] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
   const [noBooksFound, setNoBooksFound] = useState(false);
   const [apiError, setApiError] = useState('');
@@ -54,39 +55,15 @@ const BookSearch = () => {
   const currentBooks = booksList?.slice(indexOfFirstBook, indexOfLastBook);
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
-  const renderedResults = (currentBooks?.length > 0 && bookName) ? currentBooks?.map((result) => {
+  const renderedResults = (currentBooks?.length > 0 && bookName) ? currentBooks?.map((book) => {
     return (
-        <div className="ui items container" key={result.id}>
-            <div className="item">
-                <div className="ui tiny image">
-                    <img src={result.volumeInfo?.imageLinks?.smallThumbnail} alt="NoImageAvailable"/>
-                </div>
-                <div className="content">
-                    <div className="header">{result.volumeInfo.title} {result.volumeInfo.authors ? `by ${result.volumeInfo.authors}` : ''}</div>
-                    <div className="meta">
-                        <span >
-                            <a
-                            className="ui button"
-                            href={result.volumeInfo.infoLink}
-                            target="_blank"
-                            rel="noreferrer"
-                            >
-                            Buy
-                            </a>
-                        </span>
-                    </div>
-                    <div className="description">
-                        <p></p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <BooksList book={book} key={book.id} setSearchBooksList={setBooksList} searchBooksList={booksList}></BooksList>
     );
   }) : '';
 
   return (
-    <div>
-        <div className="ui form container">
+    <div>        
+      <div className="ui form container">
             <div className="field">
                 <label className="field-label">Google Books Search</label>
                 <input
@@ -115,17 +92,17 @@ const BookSearch = () => {
                 </div>
                 : ''
             }
-        </div>
-        {isLoading ? <div className="ui items container"><Loading/></div> : '' }
-        {noBooksFound ?
-            <div className="ui items container no-data-label"><p>No Books Found</p></div>
-            : ''
-        }
-        {apiError ?
-            <div className="ui items container no-data-label"><p>{apiError}</p></div>
-            : ''
-        }
-        <div className="ui celled list">{renderedResults}</div>
+      </div>
+      {isLoading ? <div className="ui items container"><Loading/></div> : '' }
+      {noBooksFound ?
+          <div className="ui items container no-data-label"><p>No Books Found</p></div>
+          : ''
+      }
+      {apiError ?
+          <div className="ui items container no-data-label"><p>{apiError}</p></div>
+          : ''
+      }
+      <div className="ui celled list">{renderedResults}</div>
     </div>
   );
 };
