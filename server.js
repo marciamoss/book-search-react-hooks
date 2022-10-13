@@ -1,4 +1,5 @@
 const express = require("express");
+require("dotenv").config();
 
 const mongoose = require("mongoose");
 const routes = require("./routes");
@@ -14,8 +15,9 @@ if (process.env.NODE_ENV === "production") {
 }
 // Add routes, both API and view
 app.use(routes);
-
-mongoose.connect('mongodb+srv://marciamoss:U95kPxhGn8qiuCMs@cluster0.qns5q.mongodb.net/newgooglebooks',
+let userName=process.env.USER_NAME;
+let password=process.env.PASSWORD;
+mongoose.connect(`mongodb+srv://${userName}:${password}@cluster0.qns5q.mongodb.net/newgooglebooks`,
 {
     useNewUrlParser: true,
     useUnifiedTopology: true,
