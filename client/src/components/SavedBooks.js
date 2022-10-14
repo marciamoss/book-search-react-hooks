@@ -34,15 +34,17 @@ const SavedBooks = () => {
     fetch();
   }, []);
 
-  useEffect(() => {
-    setAllDeleted((booksList.length===0 && deleteClicked) ? true : false);
-    setCurrentPage((currentBooks.length === 0 && booksList.length > 0) ? currentPage - 1 : currentPage);
-  }, [booksList, deleteClicked]);
-
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
   const currentBooks = booksList?.slice(indexOfFirstBook, indexOfLastBook);
   const paginate = pageNumber => setCurrentPage(pageNumber);
+
+  useEffect(() => {
+    setAllDeleted((booksList.length===0 && deleteClicked) ? true : false);
+    if(deleteClicked && currentBooks.length === 0 && booksList.length > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  }, [booksList, deleteClicked, currentBooks, currentPage]);
 
   const renderedResults = (currentBooks?.length > 0) ? currentBooks?.map((book) => {
     return (
