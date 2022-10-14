@@ -36,6 +36,7 @@ const SavedBooks = () => {
 
   useEffect(() => {
     setAllDeleted((booksList.length===0 && deleteClicked) ? true : false);
+    setCurrentPage((currentBooks.length === 0 && booksList.length > 0) ? currentPage - 1 : currentPage);
   }, [booksList, deleteClicked]);
 
   const indexOfLastBook = currentPage * booksPerPage;
