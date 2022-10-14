@@ -9,7 +9,8 @@ const saveBook = async (book, searchBooksList, setSearchBooksList) => {
   }
 }
 
-const deleteBook = async (id, setSavedBooksList, savedBooksList) => {
+const deleteBook = async (id, setSavedBooksList, savedBooksList, setDeleteClicked) => {
+  setDeleteClicked(true);
   await API.deleteBook(id)
   .then(() => setSavedBooksList(savedBooksList.filter((b => b._id !== id))))
   .catch(error => console.log('book delete failed', error));
@@ -48,7 +49,7 @@ const createBookObject = (book) => {
 
 }
 
-const BooksList = ({book, saved, setSavedBooksList, savedBooksList, searchBooksList, setSearchBooksList}) => {
+const BooksList = ({book, saved, setSavedBooksList, savedBooksList, searchBooksList, setSearchBooksList, setDeleteClicked}) => {
   const bookObject = saved ? book : createBookObject(book);
     return (
       <div className="ui items container">
@@ -77,7 +78,7 @@ const BooksList = ({book, saved, setSavedBooksList, savedBooksList, searchBooksL
                         </span>
                         : 
                         <span>
-                            <button className="ui primary button" onClick={() => deleteBook(bookObject._id, setSavedBooksList, savedBooksList)}>
+                            <button className="ui primary button" onClick={() => deleteBook(bookObject._id, setSavedBooksList, savedBooksList, setDeleteClicked)}>
                             Delete
                             </button>
                         </span>

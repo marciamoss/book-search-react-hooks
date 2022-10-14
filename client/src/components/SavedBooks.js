@@ -3,6 +3,7 @@ import API from "../utils/API";
 import Pagination from "./Pagination";
 import Loading from "./Loading";
 import BooksList from "./BooksList";
+import Menu from "./Menu";
 
 const SavedBooks = () => {
   const [booksList, setBooksList] = useState([]);
@@ -11,6 +12,9 @@ const SavedBooks = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [noBooksFound, setNoBooksFound] = useState(false);
   const [apiError, setApiError] = useState('');
+  const [allDeleted, setAllDeleted] = useState(false);
+  const [deleteClicked, setDeleteClicked] = useState(false);
+
 
   useEffect(() => {
     setIsLoading(true);
@@ -21,12 +25,18 @@ const SavedBooks = () => {
         setIsLoading(false);
         setApiError(`Api error: ${error?.message}`);
       });
-      setBooksList(response?.data);
-      setNoBooksFound((!response?.data || response?.data?.length === 0) ? true : '');
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+        setBooksList(response?.data);
+        setNoBooksFound((!response?.data || response?.data?.length === 0) ? true : '');
+      }, 200);
     };
     fetch();
   }, []);
+
+  useEffect(() => {
+    setAllDeleted((booksList.length===0 && deleteClicked) ? true : false);
+  }, [booksList, deleteClicked]);
 
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
@@ -35,16 +45,25 @@ const SavedBooks = () => {
 
   const renderedResults = (currentBooks?.length > 0) ? currentBooks?.map((book) => {
     return (
-        <BooksList book={book} key={book.id} saved={true} setSavedBooksList={setBooksList} savedBooksList={booksList}></BooksList>
+        <BooksList book={book} key={book.id} saved={true} setSavedBooksList={setBooksList} savedBooksList={booksList} setDeleteClicked={setDeleteClicked}></BooksList>
     );
   }) : '';
 
   return (
     <div className="ui form container">
+      <Menu type={'saved'}></Menu>
       <h1 className="field-label">Saved Books</h1>
       {isLoading ? <div className="ui items container"><Loading/></div> : '' }
-      {(noBooksFound || booksList.length === 0) ?
-          <div className="ui items container no-data-label"><p>No Saved Books</p></div>
+      {(noBooksFound && !allDeleted) ?
+          <div className="ui items container no-data-label">
+            <a className="no-data-label" href="/">No Saved Books, Click here to search</a>
+          </div>
+          : ''
+      }
+      {allDeleted ?
+          <div className="ui items container no-data-label test">
+            <a className="no-data-label" href="/">All saved books deleted, Click here to search</a>
+          </div>
           : ''
       }
       {apiError ?

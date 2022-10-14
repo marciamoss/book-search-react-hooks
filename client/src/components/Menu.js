@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Menu = () => {
+const Menu = ({type}) => {
   return (
     <div className="ui top fixed inverted massive menu">
-    <a className="item" href="/">Search Books</a>
-    <a className="item" href="/savedbooks">Saved Books</a>
+    <a className={`item ${type==='search' ? 'active' : ''}`} href="/">Search Books</a>
+    <a className={`item ${type==='saved' ? 'active' : ''}`} href="/savedbooks">Saved Books</a>
     </div>
   )
 };

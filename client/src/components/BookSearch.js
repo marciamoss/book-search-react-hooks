@@ -4,6 +4,8 @@ import "./BookSearch.css";
 import Pagination from "./Pagination";
 import Loading from "./Loading";
 import BooksList from "./BooksList";
+import Menu from "./Menu";
+
 
 const BookSearch = () => {
   const [bookName, setBookName] = useState("");
@@ -63,9 +65,10 @@ const BookSearch = () => {
 
   return (
     <div>        
+      <Menu type={'search'}></Menu>
       <div className="ui form container">
             <div className="field">
-                <label className="field-label">Google Books Search</label>
+                <label className="field-label">Search Books</label>
                 <input
                 value={bookName}
                 placeholder="Book Title (Required)"
