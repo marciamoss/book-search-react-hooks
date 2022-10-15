@@ -13,8 +13,6 @@ const SavedBooks = () => {
   const [noBooksFound, setNoBooksFound] = useState(false);
   const [apiError, setApiError] = useState('');
   const [allDeleted, setAllDeleted] = useState(false);
-  const [deleteClicked, setDeleteClicked] = useState(false);
-
 
   useEffect(() => {
     setIsLoading(true);
@@ -39,16 +37,11 @@ const SavedBooks = () => {
   const currentBooks = booksList?.slice(indexOfFirstBook, indexOfLastBook);
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
-  useEffect(() => {
-    setAllDeleted((booksList.length===0 && deleteClicked) ? true : false);
-    if(deleteClicked && currentBooks.length === 0 && booksList.length > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  }, [booksList, deleteClicked, currentBooks, currentPage]);
-
   const renderedResults = (currentBooks?.length > 0) ? currentBooks?.map((book) => {
     return (
-        <BooksList book={book} key={book.id} saved={true} setSavedBooksList={setBooksList} savedBooksList={booksList} setDeleteClicked={setDeleteClicked}></BooksList>
+        <BooksList book={book} key={book.id} saved={true}
+          savedPage={{setBooksList, booksList, setAllDeleted, currentBooks, setCurrentPage, currentPage}}>
+        </BooksList>
     );
   }) : '';
 

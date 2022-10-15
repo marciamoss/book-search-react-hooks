@@ -1,18 +1,29 @@
 import React from "react";
 import API from "../utils/API";
 
-const saveBook = async (book, searchBooksList, setSearchBooksList) => {
+const saveBook = async (book, searchPage) => {
   if (book.title && book.id) {
     await API.saveBook(book)
-    .then(() => setSearchBooksList(searchBooksList.filter((b => b.id !== book.id))))
+    .then(() => searchPage.setBooksList(searchPage.booksList.filter((b => b.id !== book.id))))
     .catch(error => console.log('save failed', error));
   }
 }
 
-const deleteBook = async (id, setSavedBooksList, savedBooksList, setDeleteClicked) => {
-  setDeleteClicked(true);
+const deleteBook = async (id, savedPage) => {
+  let numberOfCurrentBooks = savedPage.currentBooks.length;
+  let numberOfTotalBooks = savedPage.booksList.length;
   await API.deleteBook(id)
-  .then(() => setSavedBooksList(savedBooksList.filter((b => b._id !== id))))
+  .then(() => {
+    savedPage.setBooksList(savedPage.booksList.filter((b => b._id !== id)));
+    numberOfCurrentBooks = numberOfCurrentBooks - 1;
+    numberOfTotalBooks = numberOfTotalBooks - 1;
+    if(numberOfCurrentBooks === 0 && numberOfTotalBooks > 0) {
+      savedPage.setCurrentPage(savedPage.currentPage - 1);
+    }
+    if(numberOfTotalBooks === 0) {
+      savedPage.setAllDeleted(true);
+    }
+  })
   .catch(error => console.log('book delete failed', error));
 }
 
@@ -49,7 +60,7 @@ const createBookObject = (book) => {
 
 }
 
-const BooksList = ({book, saved, setSavedBooksList, savedBooksList, searchBooksList, setSearchBooksList, setDeleteClicked}) => {
+const BooksList = ({book, saved, savedPage, searchPage}) => {
   const bookObject = saved ? book : createBookObject(book);
     return (
       <div className="ui items container">
@@ -72,13 +83,13 @@ const BooksList = ({book, saved, setSavedBooksList, savedBooksList, searchBooksL
                       </span>
                       { !saved ? 
                         <span>
-                            <button className="ui primary button" onClick={() => saveBook(bookObject, searchBooksList, setSearchBooksList)}>
+                            <button className="ui primary button" onClick={() => saveBook(bookObject, searchPage)}>
                             Save
                             </button>
                         </span>
                         : 
                         <span>
-                            <button className="ui primary button" onClick={() => deleteBook(bookObject._id, setSavedBooksList, savedBooksList, setDeleteClicked)}>
+                            <button className="ui primary button" onClick={() => deleteBook(bookObject._id, savedPage)}>
                             Delete
                             </button>
                         </span>

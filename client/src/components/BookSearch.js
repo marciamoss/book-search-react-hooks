@@ -59,7 +59,7 @@ const BookSearch = () => {
 
   const renderedResults = (currentBooks?.length > 0 && bookName) ? currentBooks?.map((book) => {
     return (
-        <BooksList book={book} key={book.id} setSearchBooksList={setBooksList} searchBooksList={booksList}></BooksList>
+        <BooksList book={book} key={book.id} searchPage={{setBooksList, booksList}}></BooksList>
     );
   }) : '';
 
