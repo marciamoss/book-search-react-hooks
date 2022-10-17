@@ -1,15 +1,15 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import BookSearch from './components/BookSearch';
-import SavedBooks from "./components/SavedBooks";
+import SearchBook from './components/SearchBook/SearchBook';
+import SavedBooks from "./components/SavedBook/SavedBooks";
 
 function App() {
   return (
     <Router>
       <div>
         <Routes>
-          <Route path="/" element={<BookSearch/>} />
-          <Route path="/books" element={<BookSearch/>} />
+          <Route path="/" element={<SearchBook/>} />
+          <Route path="/books" element={<SearchBook/>} />
           <Route path="/savedbooks" element={<SavedBooks/>} />
         </Routes>
       </div>

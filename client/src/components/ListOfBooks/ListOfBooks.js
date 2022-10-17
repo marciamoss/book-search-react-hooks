@@ -1,30 +1,13 @@
-import React from "react";
-import API from "../utils/API";
+import React,{ useState } from "react";
+import API from "../../utils/API";
+import DeleteBook from "../DeleteBook/DeleteBook";
 
 const saveBook = async (book, searchPage) => {
   if (book.title && book.id) {
     await API.saveBook(book)
-    .then(() => searchPage.setBooksList(searchPage.booksList.filter((b => b.id !== book.id))))
+    .then(() => searchPage.setListOfBooks(searchPage.listOfBooks.filter((b => b.id !== book.id))))
     .catch(error => console.log('save failed', error));
   }
-}
-
-const deleteBook = async (id, savedPage) => {
-  let numberOfCurrentBooks = savedPage.currentBooks.length;
-  let numberOfTotalBooks = savedPage.booksList.length;
-  await API.deleteBook(id)
-  .then(() => {
-    savedPage.setBooksList(savedPage.booksList.filter((b => b._id !== id)));
-    numberOfCurrentBooks = numberOfCurrentBooks - 1;
-    numberOfTotalBooks = numberOfTotalBooks - 1;
-    if(numberOfCurrentBooks === 0 && numberOfTotalBooks > 0) {
-      savedPage.setCurrentPage(savedPage.currentPage - 1);
-    }
-    if(numberOfTotalBooks === 0) {
-      savedPage.setAllDeleted(true);
-    }
-  })
-  .catch(error => console.log('book delete failed', error));
 }
 
 const createBookObject = (book) => {
@@ -60,7 +43,8 @@ const createBookObject = (book) => {
 
 }
 
-const BooksList = ({book, saved, savedPage, searchPage}) => {
+const ListOfBooks = ({book, saved, savedPage, searchPage}) => {
+  const [showModal, setShowModal] = useState(false);
   const bookObject = saved ? book : createBookObject(book);
     return (
       <div className="ui items container">
@@ -89,9 +73,12 @@ const BooksList = ({book, saved, savedPage, searchPage}) => {
                         </span>
                         : 
                         <span>
-                            <button className="ui primary button" onClick={() => deleteBook(bookObject._id, savedPage)}>
+                            <button className="ui primary button" onClick={() => setShowModal(true)}>
                             Delete
                             </button>
+                            {showModal ? 
+                              <DeleteBook className="ui celled list" setShowModal={setShowModal} id={bookObject._id} savedPage={savedPage}/>
+                            : ''}
                         </span>
                       }
                   </div>
@@ -104,4 +91,4 @@ const BooksList = ({book, saved, savedPage, searchPage}) => {
     );
 };
 
-export default BooksList;
+export default ListOfBooks;

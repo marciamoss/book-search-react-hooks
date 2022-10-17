@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./BookSearch.css";
-import Pagination from "./Pagination";
-import Loading from "./Loading";
-import BooksList from "./BooksList";
-import Menu from "./Menu";
-
+import "./SearchBook.css";
+import Pagination from "../Pagination/Pagination";
+import Loading from "../Loading/Loading";
+import ListOfBooks from "../ListOfBooks/ListOfBooks";
+import Menu from "../Menu/Menu";
 
 const BookSearch = () => {
   const [bookName, setBookName] = useState("");
   const [author, setAuthor] = useState("");
   const [debouncedBookName, setDebouncedBookName] = useState(bookName);
-  const [booksList, setBooksList] = useState([]);
+  const [listOfBooks, setListOfBooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [booksPerPage] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,25 +40,25 @@ const BookSearch = () => {
             setIsLoading(false);
             setApiError(`Api error: ${error?.message}`);
         });
-        setBooksList(response?.data?.items);
+        setListOfBooks(response?.data?.items);
         setNoBooksFound(!response?.data?.items ? true : '');
         setIsLoading(false);
     };
     if (debouncedBookName) {
         setIsLoading(true);
-        setBooksList([]);
+        setListOfBooks([]);
         search();
     }
   }, [debouncedBookName]);
 
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
-  const currentBooks = booksList?.slice(indexOfFirstBook, indexOfLastBook);
+  const currentBooks = listOfBooks?.slice(indexOfFirstBook, indexOfLastBook);
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   const renderedResults = (currentBooks?.length > 0 && bookName) ? currentBooks?.map((book) => {
     return (
-        <BooksList book={book} key={book.id} searchPage={{setBooksList, booksList}}></BooksList>
+        <ListOfBooks book={book} key={book.id} searchPage={{setListOfBooks, listOfBooks}}></ListOfBooks>
     );
   }) : '';
 
@@ -88,7 +87,7 @@ const BookSearch = () => {
                 <div>Page
                     <Pagination
                         booksPerPage={booksPerPage}
-                        totalBooks={booksList?.length}
+                        totalBooks={listOfBooks?.length}
                         paginate={paginate}
                         currentPage={currentPage}
                     />

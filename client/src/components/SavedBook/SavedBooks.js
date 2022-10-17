@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import API from "../utils/API";
-import Pagination from "./Pagination";
-import Loading from "./Loading";
-import BooksList from "./BooksList";
-import Menu from "./Menu";
+import API from "../../utils/API";
+import Pagination from "../Pagination/Pagination";
+import Loading from "../Loading/Loading";
+import ListOfBooks from "../ListOfBooks/ListOfBooks";
+import Menu from "../Menu/Menu";
 
 const SavedBooks = () => {
-  const [booksList, setBooksList] = useState([]);
+  const [listOfBooks, setListOfBooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [booksPerPage] = useState(10);
+  const [booksPerPage] = useState(2);
   const [isLoading, setIsLoading] = useState(false);
   const [noBooksFound, setNoBooksFound] = useState(false);
   const [apiError, setApiError] = useState('');
@@ -16,7 +16,7 @@ const SavedBooks = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    setBooksList([]);
+    setListOfBooks([]);
     const fetch = async () => {
       const response = await API.getBooks().catch((error) => {
         setNoBooksFound(false);
@@ -25,7 +25,7 @@ const SavedBooks = () => {
       });
       setTimeout(() => {
         setIsLoading(false);
-        setBooksList(response?.data);
+        setListOfBooks(response?.data);
         setNoBooksFound((!response?.data || response?.data?.length === 0) ? true : '');
       }, 200);
     };
@@ -34,14 +34,14 @@ const SavedBooks = () => {
 
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
-  const currentBooks = booksList?.slice(indexOfFirstBook, indexOfLastBook);
+  const currentBooks = listOfBooks?.slice(indexOfFirstBook, indexOfLastBook);
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   const renderedResults = (currentBooks?.length > 0) ? currentBooks?.map((book) => {
     return (
-        <BooksList book={book} key={book.id} saved={true}
-          savedPage={{setBooksList, booksList, setAllDeleted, currentBooks, setCurrentPage, currentPage}}>
-        </BooksList>
+        <ListOfBooks book={book} key={book.id} saved={true}
+          savedPage={{setListOfBooks, listOfBooks, setAllDeleted, currentBooks, setCurrentPage, currentPage}}>
+        </ListOfBooks>
     );
   }) : '';
 
@@ -71,7 +71,7 @@ const SavedBooks = () => {
           <div>Page
               <Pagination
                   booksPerPage={booksPerPage}
-                  totalBooks={booksList?.length}
+                  totalBooks={listOfBooks?.length}
                   paginate={paginate}
                   currentPage={currentPage}
               />
