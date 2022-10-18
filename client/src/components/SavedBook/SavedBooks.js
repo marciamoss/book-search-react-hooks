@@ -8,7 +8,7 @@ import Menu from "../Menu/Menu";
 const SavedBooks = () => {
   const [listOfBooks, setListOfBooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [booksPerPage] = useState(2);
+  const [booksPerPage] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
   const [noBooksFound, setNoBooksFound] = useState(false);
   const [apiError, setApiError] = useState('');

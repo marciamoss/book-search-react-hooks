@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Modal } from 'semantic-ui-react';
 import API from "../../utils/API";
+import ErrorModal from "../ErrorModal/ErrorModal";
 
 function DeleteBook({setShowModal, id, savedPage}) {
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState({type: '', error: ''});
 
   const confirmDeleteBook = async (id, savedPage) => {
+    setShowError(false);
+    setErrorMessage({type: '', error: ''});
     let numberOfCurrentBooks = savedPage.currentBooks.length;
     let numberOfTotalBooks = savedPage.listOfBooks.length;
     await API.deleteBook(id)
@@ -19,7 +24,10 @@ function DeleteBook({setShowModal, id, savedPage}) {
         savedPage.setAllDeleted(true);
       }
     })
-    .catch(error => console.log('book delete failed', error));
+    .catch(error => {
+      setShowError(true);
+      setErrorMessage({type: "Delete Failed at this time", error: error?.message});
+    });
   }
   
   return (
@@ -37,6 +45,7 @@ function DeleteBook({setShowModal, id, savedPage}) {
           positive>Yes
         </Button>
       </Modal.Actions>
+      {showError ? <ErrorModal setShowError={setShowError} errorMessage={errorMessage}></ErrorModal>: ''}
     </Modal>
   )
 }

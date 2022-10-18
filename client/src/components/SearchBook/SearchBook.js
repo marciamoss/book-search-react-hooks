@@ -5,8 +5,9 @@ import Pagination from "../Pagination/Pagination";
 import Loading from "../Loading/Loading";
 import ListOfBooks from "../ListOfBooks/ListOfBooks";
 import Menu from "../Menu/Menu";
+import ErrorModal from "../ErrorModal/ErrorModal";
 
-const BookSearch = () => {
+const SearchBooks = () => {
   const [bookName, setBookName] = useState("");
   const [author, setAuthor] = useState("");
   const [debouncedBookName, setDebouncedBookName] = useState(bookName);
@@ -15,12 +16,14 @@ const BookSearch = () => {
   const [booksPerPage] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
   const [noBooksFound, setNoBooksFound] = useState(false);
-  const [apiError, setApiError] = useState('');
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState({type: '', error: ''});
 
   useEffect(() => {
     setNoBooksFound(!bookName ? false : '');
     setIsLoading(!bookName ? false : '');
-    setApiError('');
+    setShowError(false);
+    setErrorMessage({type: '', error: ''});
     let bookNAuthor=bookName ? (bookName).split(" ").join("+")+(author).split(" ").join("+") : '';
     const timerId = setTimeout(() => {
         setDebouncedBookName(bookNAuthor);
@@ -38,7 +41,8 @@ const BookSearch = () => {
         const response = await axios.get(BASEURL + debouncedBookName + APIKEY).catch((error) => {
             setNoBooksFound(false);
             setIsLoading(false);
-            setApiError(`Api error: ${error?.message}`);
+            setShowError(true);
+            setErrorMessage({type: "Search for books failed", error: error?.message});
         });
         setListOfBooks(response?.data?.items);
         setNoBooksFound(!response?.data?.items ? true : '');
@@ -96,18 +100,15 @@ const BookSearch = () => {
             }
       </div>
       {isLoading ? <div className="ui items container"><Loading/></div> : '' }
-      {noBooksFound ?
-          <div className="ui items container no-data-label"><p>No Books Found</p></div>
-          : ''
-      }
-      {apiError ?
-          <div className="ui items container no-data-label"><p>{apiError}</p></div>
-          : ''
-      }
+
+      {noBooksFound ? <div className="ui items container no-data-label"><p>No Books Found</p></div> : ''}
+
+      {showError ? <ErrorModal setShowError={setShowError} errorMessage={errorMessage}></ErrorModal>: ''}
+
       <div className="ui celled list">{renderedResults}</div>
     </div>
   );
 };
 
-export default BookSearch;
+export default SearchBooks;
 

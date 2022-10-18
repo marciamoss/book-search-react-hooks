@@ -1,51 +1,30 @@
-import React,{ useState } from "react";
+import React, { useState } from "react";
 import API from "../../utils/API";
+import createBookObject from "../../utils/createBookObject";
 import DeleteBook from "../DeleteBook/DeleteBook";
-
-const saveBook = async (book, searchPage) => {
-  if (book.title && book.id) {
-    await API.saveBook(book)
-    .then(() => searchPage.setListOfBooks(searchPage.listOfBooks.filter((b => b.id !== book.id))))
-    .catch(error => console.log('save failed', error));
-  }
-}
-
-const createBookObject = (book) => {
-  let id="", title="", authors="", booklink="", bookimg="", synopsis="";
-  if(book.id){
-    id=book.id;
-  }
-  if(book.volumeInfo.title){
-    title=book.volumeInfo.title;
-  }
-  if(book.volumeInfo.authors){
-    authors=" by " + (book.volumeInfo.authors).join(", ");
-  }
-  if(book.volumeInfo.infoLink){
-    booklink=book.volumeInfo.infoLink;
-  }
-  if("imageLinks" in book.volumeInfo){
-    if("smallThumbnail" in book.volumeInfo.imageLinks){
-      bookimg= book.volumeInfo.imageLinks.smallThumbnail;
-    }
-  }
-  if(book.volumeInfo.description){
-    synopsis=book.volumeInfo.description;
-  }
-  return { 
-    id,
-    title,
-    authors,
-    booklink, 
-    bookimg,
-    synopsis
-  };
-
-}
+import ErrorModal from "../ErrorModal/ErrorModal";
 
 const ListOfBooks = ({book, saved, savedPage, searchPage}) => {
   const [showModal, setShowModal] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState({type: '', error: ''});
   const bookObject = saved ? book : createBookObject(book);
+
+  const saveBook = async (book, searchPage) => {
+    setShowError(false);
+    setErrorMessage({type: '', error: ''});
+    if (book.title && book.id) {
+      const fetchBooks = await API.getBooks();
+      const previouslySaved = fetchBooks?.data?.filter((b => b.id === book.id)) || [];
+      if(previouslySaved.length === 0) {
+        await API.saveBook(book)
+        .then(() => searchPage.setListOfBooks(searchPage.listOfBooks.filter((b => b.id !== book.id))))
+        .catch(error => {setShowError(true);setErrorMessage({type: "Save failed, Please try again", error: error?.message});});
+      } else {
+        searchPage.setListOfBooks(searchPage.listOfBooks.filter((b => b.id !== book.id)));
+      }
+    }
+  }
     return (
       <div className="ui items container">
           <div className="item">
@@ -86,6 +65,7 @@ const ListOfBooks = ({book, saved, savedPage, searchPage}) => {
                       <p>{bookObject.synopsis}</p>
                   </div>
               </div>
+              {showError ? <ErrorModal setShowError={setShowError} errorMessage={errorMessage}></ErrorModal>: ''}
           </div>
       </div>
     );
