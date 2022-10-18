@@ -47,11 +47,27 @@ const SearchBooks = () => {
       setIsLoading(false);
     };
     if (debouncedBookName) {
-        setIsLoading(true);
-        setListOfBooks([]);
-        search();
+      localStorage.clear();
+      if(bookName) {
+        localStorage.setItem("name", bookName);
+      }
+      if(author) {
+        localStorage.setItem("author", author);
+      }
+      setIsLoading(true);
+      setListOfBooks([]);
+      search();
     }
   }, [debouncedBookName]);
+
+  useEffect(() => {
+    if(localStorage.getItem("name")) {
+      setBookName(localStorage.getItem("name"));
+    }
+    if(localStorage.getItem("author")) {
+      setAuthor(localStorage.getItem("author"));
+    }
+  },[])
 
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
