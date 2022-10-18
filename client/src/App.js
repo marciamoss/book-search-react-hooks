@@ -9,7 +9,6 @@ function App() {
       <div>
         <Routes>
           <Route path="/" element={<SearchBook/>} />
-          <Route path="/books" element={<SearchBook/>} />
           <Route path="/savedbooks" element={<SavedBooks/>} />
         </Routes>
       </div>
