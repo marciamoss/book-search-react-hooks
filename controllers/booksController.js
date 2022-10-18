@@ -1,4 +1,8 @@
 const db = require("../models");
+require("dotenv").config();
+const axios = require("axios");
+const Baseurl1=process.env.BASEURL1;
+const Apikey1=process.env.APIKEY1;
 
 // Defining methods for the booksController
 module.exports = {
@@ -16,10 +20,16 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
   create: function(req, res) {
-    db.Book
-      .create(req.body)
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
+    if (req.body.type === 'search') {
+      axios.get(`${Baseurl1}${req.body.name}${Apikey1}`)
+        .then(response => res.send(response.data))
+        .catch(err => res.status(422).json(err));
+    } else {
+      db.Book
+        .create(req.body)
+        .then(dbModel => res.json(dbModel))
+        .catch(err => res.status(422).json(err));
+    }
   },
   update: function(req, res) {
     db.Book

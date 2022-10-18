@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import API from "../../utils/API";
 import "./SearchBook.css";
 import Pagination from "../Pagination/Pagination";
 import Loading from "../Loading/Loading";
@@ -35,18 +35,16 @@ const SearchBooks = () => {
   }, [bookName, author]);
 
   useEffect(() => {
-    const BASEURL = "https://www.googleapis.com/books/v1/volumes?q=:";
-    const APIKEY = "&key=AIzaSyA5c5WsLSg30PL4WJkx92HtHn8JitM_DEo&startIndex=0&maxResults=40";
     const search = async () => {
-        const response = await axios.get(BASEURL + debouncedBookName + APIKEY).catch((error) => {
-            setNoBooksFound(false);
-            setIsLoading(false);
-            setShowError(true);
-            setErrorMessage({type: "Search for books failed", error: error?.message});
-        });
-        setListOfBooks(response?.data?.items);
-        setNoBooksFound(!response?.data?.items ? true : '');
-        setIsLoading(false);
+      const response = await API.searchBooks({name:debouncedBookName, type:'search'}).catch((error) => {
+          setNoBooksFound(false);
+          setIsLoading(false);
+          setShowError(true);
+          setErrorMessage({type: "Search for books failed", error: error?.message});
+      });
+      setListOfBooks(response?.data?.items);
+      setNoBooksFound(!response?.data?.items ? true : '');
+      setIsLoading(false);
     };
     if (debouncedBookName) {
         setIsLoading(true);
