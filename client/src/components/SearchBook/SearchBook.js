@@ -27,6 +27,13 @@ const SearchBooks = () => {
     let bookNAuthor=bookName ? (bookName).split(" ").join("+")+(author).split(" ").join("+") : '';
     const timerId = setTimeout(() => {
         setDebouncedBookName(bookNAuthor);
+        if(bookName) {
+          localStorage.clear();
+          localStorage.setItem("name", bookName);
+        }
+        if(author) {
+          localStorage.setItem("author", author);
+        }
     }, 1000);
 
     return () => {
@@ -47,13 +54,6 @@ const SearchBooks = () => {
       setIsLoading(false);
     };
     if (debouncedBookName) {
-      localStorage.clear();
-      if(bookName) {
-        localStorage.setItem("name", bookName);
-      }
-      if(author) {
-        localStorage.setItem("author", author);
-      }
       setIsLoading(true);
       setListOfBooks([]);
       search();
