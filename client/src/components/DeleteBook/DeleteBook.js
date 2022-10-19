@@ -3,7 +3,7 @@ import { Button, Modal } from 'semantic-ui-react';
 import API from "../../utils/API";
 import ErrorModal from "../ErrorModal/ErrorModal";
 
-function DeleteBook({setShowModal, id, savedPage}) {
+function DeleteBook({setShowModal, title, id, savedPage}) {
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState({type: '', error: ''});
 
@@ -32,9 +32,9 @@ function DeleteBook({setShowModal, id, savedPage}) {
   
   return (
     <Modal size={'mini'} onClose={() => setShowModal(false)} open={true}>
-      <Modal.Header>Delete Saved Book</Modal.Header>
+      <Modal.Header>Delete {title}</Modal.Header>
       <Modal.Content>
-        <p>Are you sure you want to delete the book</p>
+        <p>Are you sure you want to delete the book {title}</p>
       </Modal.Content>
       <Modal.Actions>
         <Button negative onClick={() => setShowModal(false)}>

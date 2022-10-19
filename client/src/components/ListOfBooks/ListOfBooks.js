@@ -21,7 +21,10 @@ const ListOfBooks = ({book, saved, savedPage, searchPage}) => {
         .then(() => searchPage.setListOfBooks(searchPage.listOfBooks.filter((b => b.id !== book.id))))
         .catch(error => {setShowError(true);setErrorMessage({type: "Save failed, Please try again", error: error?.message});});
       } else {
-        searchPage.setListOfBooks(searchPage.listOfBooks.filter((b => b.id !== book.id)));
+        setTimeout(() => {
+          searchPage.setListOfBooks(searchPage.listOfBooks.filter((b => b.id !== book.id)));
+        }, 2000);
+        setShowError(true);setErrorMessage({error: `${book.title} Was Saved Previously`});
       }
     }
   }
@@ -56,7 +59,7 @@ const ListOfBooks = ({book, saved, savedPage, searchPage}) => {
                             Delete
                             </button>
                             {showModal ? 
-                              <DeleteBook className="ui celled list" setShowModal={setShowModal} id={bookObject._id} savedPage={savedPage}/>
+                              <DeleteBook className="ui celled list" setShowModal={setShowModal} title={bookObject.title} id={bookObject._id} savedPage={savedPage}/>
                             : ''}
                         </span>
                       }
