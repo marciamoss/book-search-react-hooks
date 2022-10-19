@@ -27,7 +27,9 @@ const SearchBooks = () => {
     let bookNAuthor=bookName ? (bookName).split(" ").join("+")+(author).split(" ").join("+") : '';
     const timerId = setTimeout(() => {
         setDebouncedBookName(bookNAuthor);
-        if(bookName) {
+        if (!bookName) {
+          setListOfBooks([]);
+        } else {
           localStorage.clear();
           localStorage.setItem("name", bookName);
         }
@@ -74,7 +76,7 @@ const SearchBooks = () => {
   const currentBooks = listOfBooks?.slice(indexOfFirstBook, indexOfLastBook);
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
-  const renderedResults = (currentBooks?.length > 0 && bookName) ? currentBooks?.map((book) => {
+  const renderedResults = (currentBooks?.length > 0) ? currentBooks?.map((book) => {
     return (
         <ListOfBooks book={book} key={book.id} searchPage={{setListOfBooks, listOfBooks}}></ListOfBooks>
     );
@@ -101,7 +103,7 @@ const SearchBooks = () => {
                     className="input"
                 />
             </div>
-            {(currentBooks?.length > 0 && bookName) ?
+            {(currentBooks?.length > 0) ?
                 <div>Page
                     <Pagination
                         booksPerPage={booksPerPage}
