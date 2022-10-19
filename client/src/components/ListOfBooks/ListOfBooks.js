@@ -3,11 +3,13 @@ import API from "../../utils/API";
 import createBookObject from "../../utils/createBookObject";
 import DeleteBook from "../DeleteBook/DeleteBook";
 import ErrorModal from "../ErrorModal/ErrorModal";
+import SaveConfirmation from "../SaveConfirmation/SaveConfirmation";
 
 const ListOfBooks = ({book, saved, savedPage, searchPage}) => {
   const [showModal, setShowModal] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState({type: '', error: ''});
+  const [showSaveConfirm, setShowSaveConfirm] = useState(false);
   const bookObject = saved ? book : createBookObject(book);
 
   const saveBook = async (book, searchPage) => {
@@ -18,7 +20,13 @@ const ListOfBooks = ({book, saved, savedPage, searchPage}) => {
       const previouslySaved = fetchBooks?.data?.filter((b => b.id === book.id)) || [];
       if(previouslySaved.length === 0) {
         await API.saveBook(book)
-        .then(() => searchPage.setListOfBooks(searchPage.listOfBooks.filter((b => b.id !== book.id))))
+        .then(() => {
+          setShowSaveConfirm(true);
+          setTimeout(() => {
+            setShowSaveConfirm(false);
+            searchPage.setListOfBooks(searchPage.listOfBooks.filter((b => b.id !== book.id)));
+          }, 1500);
+        })
         .catch(error => {setShowError(true);setErrorMessage({type: "Save failed, Please try again", error: error?.message});});
       } else {
         setTimeout(() => {
@@ -68,7 +76,8 @@ const ListOfBooks = ({book, saved, savedPage, searchPage}) => {
                       <p>{bookObject.synopsis}</p>
                   </div>
               </div>
-              {showError ? <ErrorModal setShowError={setShowError} errorMessage={errorMessage}></ErrorModal>: ''}
+              {showError ? <ErrorModal setShowError={setShowError} errorMessage={errorMessage}></ErrorModal> : ''}
+              {showSaveConfirm ? <SaveConfirmation title={bookObject.title}></SaveConfirmation> : ''}
           </div>
       </div>
     );
