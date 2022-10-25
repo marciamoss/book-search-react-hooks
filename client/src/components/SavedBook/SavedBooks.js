@@ -3,7 +3,6 @@ import API from "../../utils/API";
 import Pagination from "../Pagination/Pagination";
 import Loading from "../Loading/Loading";
 import ListOfBooks from "../ListOfBooks/ListOfBooks";
-import Menu from "../Menu/Menu";
 
 const SavedBooks = () => {
   const [listOfBooks, setListOfBooks] = useState([]);

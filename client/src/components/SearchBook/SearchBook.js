@@ -4,7 +4,6 @@ import "./SearchBook.css";
 import Pagination from "../Pagination/Pagination";
 import Loading from "../Loading/Loading";
 import ListOfBooks from "../ListOfBooks/ListOfBooks";
-import Menu from "../Menu/Menu";
 import ErrorModal from "../ErrorModal/ErrorModal";
 
 const SearchBooks = () => {
