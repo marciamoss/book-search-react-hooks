@@ -47,7 +47,6 @@ const SavedBooks = () => {
 
   return (
     <div className="ui form container">
-      <Menu type={'saved'}></Menu>
       <h1 className="field-label">Saved Books</h1>
       {isLoading ? <div className="ui items container"><Loading/></div> : '' }
       {(noBooksFound && !allDeleted) ?

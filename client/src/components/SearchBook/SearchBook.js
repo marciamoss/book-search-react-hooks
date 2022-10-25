@@ -84,7 +84,6 @@ const SearchBooks = () => {
 
   return (
     <div>        
-      <Menu type={'search'}></Menu>
       <div className="ui form container">
             <div className="field">
                 <label className="field-label">Search Books</label>
