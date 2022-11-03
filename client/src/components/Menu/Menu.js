@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 const Menu = () => {
   let type = 'search';
@@ -9,8 +9,8 @@ const Menu = () => {
   }
   return (
     <div onClick={handleClick()} className="ui top fixed inverted massive menu">
-      <a className={`item ${type==='search' ? 'active' : ''}`} href="/">Search Books</a>
-      <a className={`item ${type==='saved' ? 'active' : ''}`} href="/savedbooks">Saved Books</a>
+      <Link className={`item ${type==='search' ? 'active' : ''}`} to="/">Search Books</Link>
+      <Link className={`item ${type==='saved' ? 'active' : ''}`} to="/savedbooks">Saved Books</Link>
     </div>
   );
 }

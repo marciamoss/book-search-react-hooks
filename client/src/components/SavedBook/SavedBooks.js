@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import API from "../../utils/API";
 import Pagination from "../Pagination/Pagination";
 import Loading from "../Loading/Loading";
@@ -50,13 +51,13 @@ const SavedBooks = () => {
       {isLoading ? <div className="ui items container"><Loading/></div> : '' }
       {(noBooksFound && !allDeleted) ?
           <div className="ui items container no-data-label">
-            <a className="no-data-label" href="/">No Saved Books, Click here to search</a>
+            <Link className="no-data-label" to="/">No Saved Books, Click here to search</Link>
           </div>
           : ''
       }
       {allDeleted ?
           <div className="ui items container no-data-label test">
-            <a className="no-data-label" href="/">All saved books deleted, Click here to search</a>
+            <Link className="no-data-label" to="/">All saved books deleted, Click here to search</Link>
           </div>
           : ''
       }
