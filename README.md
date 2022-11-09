@@ -1,6 +1,12 @@
 # React-Book-Search Using React Hooks
 
-**APP Link** https://book-search-react-hooks.herokuapp.com
+**Since Heroku is retiring its free tier, this app has been adapted to run on vercel.**
+
+**Vercel App Link** https://books-hooks-marciamoss.vercel.app
+
+**Git hub Link** https://github.com/marciamoss/books-hooks
+
+**Heroku deployed APP Link** https://book-search-react-hooks.herokuapp.com
 
 * A full stack application built with react/hooks, express, mongodb & node.js.
 * User searches for books via the Google Books API and the search results are rendered here.
